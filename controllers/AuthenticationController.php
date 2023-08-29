@@ -81,9 +81,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Invalid login.");
             }
         }
+
+   
+        
+
     } catch (Exception $error) {
         $_SESSION['error'] = $error->getMessage();
         header("Location: " . $_SERVER['HTTP_REFERER']);
         exit;
     }
 }
+
+     // Logout logic
+     if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+        session_unset();
+        session_destroy();
+        header("Location: ../views/loginView.php");
+        exit;
+    }

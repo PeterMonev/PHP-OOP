@@ -7,12 +7,8 @@ session_start();
 
     <div class="container mt-5 w-50 p-5 text-center shadow-lg rounded">
 
-
         <?php
-        if (isset($_SESSION['error'])) {
-            echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-            unset($_SESSION['error']);
-        }
+          include('../includes/alertMessage.php');
         ?>
 
         <h2 class="mb-4">Login</h2>

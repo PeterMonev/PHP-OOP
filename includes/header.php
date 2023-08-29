@@ -32,7 +32,7 @@
                 <a class="nav-link text-info" href="admin.php">Admin</a>
             </li>
               <li class="nav-item">
-                <a class="nav-link text-info" href="logout.php">Logout</a>
+                <a class="nav-link text-info" href="../controllers/AuthenticationController.php?action=logout">Logout</a>
             </li>
             
         </ul>
