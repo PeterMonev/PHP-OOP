@@ -10,7 +10,7 @@ class User {
     public function __construct($id, $username, $password, $email, $role){
         $this->id = $id;
         $this->username = $username;
-        $this->password = $password;
+        $this->setPassword($password);
         $this->email = $email;
         $this->role = $role;
     }
@@ -37,19 +37,19 @@ class User {
     }
 
     // Setters
-    public function setUsername($username){
+    private function setUsername($username){
         $this-> username = $username;
     }
 
-    public function setPassword($password){
+    private function setPassword($password){
         $this-> password = password_hash($password, PASSWORD_BCRYPT);
     }
 
-    public function setEmail($email){
+    private function setEmail($email){
         $this->email = $email;
     }
 
-    public function setRole($role){
+    private function setRole($role){
         $this->role = $role;
     }
 

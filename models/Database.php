@@ -36,11 +36,10 @@ class Database {
     }
 
     public function createUser($username, $password, $email, $role) {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $query = "INSERT INTO users (username, password, email, role) VALUES (:username, :password, :email, :role)";
         $params = [
             ':username' => $username,
-            ':password' => $hashedPassword,
+            ':password' => $password,
             ':email' => $email,
             ':role' => $role
         ];
@@ -48,12 +47,11 @@ class Database {
     }
 
     public function updateUser($id, $username, $password, $email, $role) {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $query = "UPDATE users SET username = :username, password = :password, email = :email, role = :role WHERE id = :id";
         $params = [
             ':id' => $id,
             ':username' => $username,
-            ':password' => $hashedPassword,
+            ':password' => $password,
             ':email' => $email,
             ':role' => $role
         ];
