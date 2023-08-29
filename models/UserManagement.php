@@ -17,9 +17,15 @@ class UserManagement {
     public function getUserByEmail($email) {
         $query = "SELECT * FROM users WHERE email = :email";
         $users = $this->database->query($query, [':email' => $email]);
-        return !empty($users) ? new User($users[0]['id'], $users[0]['username'], $users[0]['password'], $users[0]['email'], $users[0]['role']) : null;
+
+        if (!empty($users)) {
+            $user = new User($users[0]['id'], $users[0]['username'], "", $users[0]['email'], $users[0]['role']);
+            $user->setHashedPassword($users[0]['password']);
+            return $user;
+        }
+
+        return null;
     }
-    
 
     public function updateUser(User $user) {
         return $this->database->updateUser($user->getId(), $user->getUsername(), $user->getPassword(), $user->getEmail(), $user->getRole());

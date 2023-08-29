@@ -1,3 +1,5 @@
+<?php include('../includes/authentication.php');?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,26 +18,44 @@
 </head>
 
 <header>
-<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center bg-dark">
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link text-info" href="/php-oop/views/loginView.php">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-info" href="/php-oop/views/registerView.php">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-info" href="profile.php">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-info" href="admin.php">Admin</a>
-            </li>
-              <li class="nav-item">
-                <a class="nav-link text-info" href="../controllers/AuthenticationController.php?action=logout">Logout</a>
-            </li>
-            
-        </ul>
-    </div>
-</nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center bg-dark">
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+            <?php
+                if (!isRoleUser() && !isRoleAdmin()) {
+                    //  Links for guests
+                    echo '
+                    <li class="nav-item">
+                      <a class="nav-link text-info" href="../views/loginView.php">Login</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-info" href="../views/registerView.php">Register</a>
+                    </li>';
+                } else {
+                    // Link for logout
+                    echo '
+                    <li class="nav-item">
+                       <a class="nav-link text-info" href="../controllers/AuthenticationController.php?action=logout">Logout</a>
+                    </li>';
+
+                    // Links for users
+                    if (isRoleUser() && !isRoleAdmin()) {
+                        echo '
+                        <li class="nav-item">
+                           <a class="nav-link text-info" href="../views/profileView.php">Profile</a>
+                        </li>';
+                    }
+                    
+                    //  Links for admin
+                    if (isRoleAdmin()) {
+                        echo '
+                        <li class="nav-item">
+                           <a class="nav-link text-info" href="admin.php">Admin</a>
+                        </li>';
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+    </nav>
 </header>

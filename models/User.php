@@ -42,7 +42,11 @@ class User {
     }
 
     private function setPassword($password){
-        $this-> password = password_hash($password, PASSWORD_BCRYPT);
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    public function setHashedPassword($hashedPassword) {
+        $this->password = $hashedPassword;
     }
 
     private function setEmail($email){

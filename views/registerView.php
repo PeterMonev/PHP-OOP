@@ -8,23 +8,20 @@ session_start();
 
     <div class="container mt-5 w-50 text-center shadow-lg rounded p-5">
 
-        <?php
-        include('../includes/alertMessage.php');
-        ?>
-
+  
         <h2 class="mb-4">Registration Form</h2>
         <form action="../controllers/AuthenticationController.php" method="post">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" class="form-control" name="username" id="username">
+                <input type="text" class="form-control" name="username" id="username" >
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" name="password" id="password">
+                <input type="password" class="form-control" name="password" id="password" >
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" name="email" id="email">
+                <input type="email" class="form-control" name="email" id="email" >
             </div>
             <button type="submit" name="register" class="btn btn-info">Register</button>
             <div class="form-group mt-3">

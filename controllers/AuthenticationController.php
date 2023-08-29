@@ -72,13 +72,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $userData = $userManager->getUserByEmail($email);
-
+            echo password_verify($password, $userData->getPassword());
             if ($userData && password_verify($password, $userData->getPassword())) {
                 $_SESSION['user_id'] = $userData->getId();
-                header("Location: ../views/profileView.php");
-                exit;
+                $_SESSION['role'] = $userData->getRole();
+
+                if($userData->getRole() === 'user'){
+                    header("Location: ../views/profileView.php");
+                    exit;
+                } else {
+                    header("Location: ../views/adminView.php");
+                    exit;
+                }
+             
             } else {
-                throw new Exception("Invalid login.");
+                throw new Exception("Invalid email or password.");
             }
         }
 
