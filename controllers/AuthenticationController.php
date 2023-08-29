@@ -3,37 +3,35 @@ require_once '../models/Database.php';
 require_once '../models/User.php';
 require_once '../models/UserManagement.php';
 
-session_start(); // Starts the session
+class AuthenticaitonController {
+    private $userManager;
 
-function isValidEmail($email)
-{
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return false;
+    public function __construct() {
+        session_start();
+        $this->userManager = new UserManagement();
     }
 
-    $pattern = "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/";
-    return preg_match($pattern, $email);
-}
+    private function isValidEmail($email) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $userManager = new UserManagement();
+        $pattern = "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/";
+        return preg_match($pattern, $email);
+    }
 
-        // Registration logic
-        if (isset($_POST['register'])) {
+    public function register() {
+        try {
             $username = $_POST['username'];
             $password = $_POST['password'];
             $email = $_POST['email'];
-            $role = 'user'; // Default role you 
+            $role = 'user';
 
-            // Regisuter Input field validation
             if (empty($username) || empty($password) || empty($email)) {
                 throw new Exception("All fields are required!");
             }
 
-
-            // Validate email format
-            if (!isValidEmail($email)) {
+            if (!$this->isValidEmail($email)) {
                 throw new Exception("Invalid email format.");
             }
 
@@ -41,69 +39,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Password should be at least 3 characters long!");
             }
 
-            if ($userManager->doesEmailExist($email)) {
+            if ($this->userManager->doesEmailExist($email)) {
                 throw new Exception("Email already registered!");
             }
 
             $user = new User(null, $username, $password, $email, $role);
 
-            if (!$userManager->addUser($user)) {
+            if (!$this->userManager->addUser($user)) {
                 throw new Exception("There was an error registering the user.");
             }
 
             header("Location: ../views/loginView.php");
             exit;
+        } catch (Exception $error) {
+            $_SESSION['error'] = $error->getMessage();
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit;
         }
+    }
 
-        // Login logic
-        if (isset($_POST['login'])) {
-            // Input validation
+    public function login() {
+        try {
             $email = trim($_POST['email']);
             $password = trim($_POST['password']);
 
-            // Check if email or password fields are empty
             if (empty($email) || empty($password)) {
                 throw new Exception("Email and password are required.");
             }
 
-            // Validate email format
-            if (!isValidEmail($email)) {
+            if (!$this->isValidEmail($email)) {
                 throw new Exception("Invalid email format.");
             }
 
-            $userData = $userManager->getUserByEmail($email);
-            echo password_verify($password, $userData->getPassword());
+            $userData = $this->userManager->getUserByEmail($email);
+
             if ($userData && password_verify($password, $userData->getPassword())) {
                 $_SESSION['user_id'] = $userData->getId();
                 $_SESSION['role'] = $userData->getRole();
 
                 if($userData->getRole() === 'user'){
                     header("Location: ../views/profileView.php");
-                    exit;
                 } else {
                     header("Location: ../views/adminView.php");
-                    exit;
                 }
-             
+                exit;
             } else {
                 throw new Exception("Invalid email or password.");
             }
+        } catch (Exception $error) {
+            $_SESSION['error'] = $error->getMessage();
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit;
         }
-
-   
-        
-
-    } catch (Exception $error) {
-        $_SESSION['error'] = $error->getMessage();
-        header("Location: " . $_SERVER['HTTP_REFERER']);
-        exit;
     }
-}
 
-     // Logout logic
-     if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    public function logout() {
         session_unset();
         session_destroy();
         header("Location: ../views/loginView.php");
         exit;
     }
+}
+
+// Using the class
+$auth = new AuthenticaitonController();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['register'])) {
+        $auth->register();
+    }
+    if (isset($_POST['login'])) {
+        $auth->login();
+    }
+}
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    $auth->logout();
+}
