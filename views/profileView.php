@@ -22,6 +22,9 @@ if (!isRoleUser() || isRoleAdmin()) {
 
 <body>
 <div class="container mt-5 shadow-lg p-5 rounded">
+<?php
+  include('../includes/alertMessage.php');
+  ?>
     <div class="card">
         <div class="card-header text-center">
             <h3>Profile Page Information</h3>

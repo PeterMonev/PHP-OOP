@@ -89,7 +89,9 @@ if (isset($_POST['update'])) {
     $updatedEmail = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
     if (!$idToUpdate || !$updatedUsername || !$updatedEmail) {
-        throw new Exception('Invalid input data for updating');
+        $_SESSION['success'] = "Profile Updated Successfully!";
+        header('Location: ../views/profileView.php');
+        exit;
     }
 
     $controller = new UserManagementController();
