@@ -27,6 +27,14 @@ class UserManagement {
         return null;
     }
 
+ 
+    public function readUser($id) {
+           $query = "SELECT * FROM users WHERE id = :id";
+           $users = $this->database->query($query, [':id' => $id]);
+           return !empty($users) ? $users[0] : null;
+}
+
+
     public function updateUser(User $user) {
         return $this->database->updateUser($user->getId(), $user->getUsername(), $user->getPassword(), $user->getEmail(), $user->getRole());
     }
@@ -40,6 +48,9 @@ class UserManagement {
         $users = $this->database->query($query, [':email' => $email]);
         return !empty($users); // returns true if email exists, false otherwise
     }
-}
 
-?>
+    public function getAllUsers() {
+        $query = "SELECT * FROM users";
+        return $this->database->query($query);
+    }
+}

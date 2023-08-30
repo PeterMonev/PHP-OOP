@@ -32,12 +32,6 @@
                       <a class="nav-link text-info" href="../views/registerView.php">Register</a>
                     </li>';
                 } else {
-                    // Link for logout
-                    echo '
-                    <li class="nav-item">
-                       <a class="nav-link text-info" href="../controllers/AuthenticationController.php?action=logout">Logout</a>
-                    </li>';
-
                     // Links for users
                     if (isRoleUser() && !isRoleAdmin()) {
                         echo '
@@ -50,9 +44,15 @@
                     if (isRoleAdmin()) {
                         echo '
                         <li class="nav-item">
-                           <a class="nav-link text-info" href="admin.php">Admin</a>
+                           <a class="nav-link text-info" href="../views/adminView.php">Admin</a>
                         </li>';
                     }
+
+                       // Link for logout
+                       echo '
+                       <li class="nav-item">
+                          <a class="nav-link text-info" href="../controllers/AuthenticationController.php?action=logout">Logout</a>
+                       </li>';
                 }
                 ?>
             </ul>
