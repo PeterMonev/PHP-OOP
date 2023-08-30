@@ -35,9 +35,16 @@ class UserManagement {
 }
 
 
-    public function updateUser(User $user) {
-        return $this->database->updateUser($user->getId(), $user->getUsername(), $user->getPassword(), $user->getEmail(), $user->getRole());
-    }
+   public function updateUser(User $user) {
+    $query = "UPDATE users SET username = :username, email = :email, role = :role WHERE id = :id";
+    $params = [
+        ':id' => $user->getId(),
+        ':username' => $user->getUsername(),
+        ':email' => $user->getEmail(),
+        ':role' => $user->getRole()
+    ];
+    return $this->database->execute($query, $params);
+}
 
     public function deleteUser($id) {
         return $this->database->deleteUser($id);
