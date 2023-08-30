@@ -16,5 +16,5 @@ This is a PHP & MySQL (MVC model) User Management System with Login and Registra
 - Login Page: http://localhost/php-oop/views/loginView.php
 - Register Page: http://localhost/php-oop/views/registerView.php
 - Admin Page: http://localhost/php-oop/views/adminView.php
-* Default Admin Account is `username: peter` `password: 1234`
+* Default Admin Account is `email: peter@abv.bg` `password: 1234`
 - Profile Page: http://localhost/php-oop/views/profileView.php
