@@ -60,6 +60,7 @@ try {
         $newUsername = filter_input(INPUT_POST, 'editUsername');
         $newEmail = filter_input(INPUT_POST, 'editEmail', FILTER_SANITIZE_EMAIL);
         $newRole = filter_input(INPUT_POST, 'editRole');
+  
 
         if (!$idToEdit || !$newUsername || !$newEmail || !$newRole) {
             throw new Exception('Invalid input data for editing');
@@ -74,30 +75,31 @@ try {
             throw new Exception('Failed to edit user with ID: ' . $idToEdit);
         }
     }
-     // User update logic
-     if (isset($_POST['update'])) {
-        $idToUpdate = filter_input(INPUT_POST, 'updateUserId', FILTER_SANITIZE_NUMBER_INT);
-        $updatedUsername = filter_input(INPUT_POST, 'username');
-        $updatedEmail = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-
-        if (!$idToUpdate || !$updatedUsername || !$updatedEmail) {
-            throw new Exception('Invalid input data for updating');
-        }
-
-        $controller = new UserManagementController();
-
-        if ($controller->updateUser($idToUpdate, $updatedUsername, $updatedEmail, $user['role'])) {
-            $_SESSION['success'] = "Profile Updated Successfully!";
-            header('Location: ../views/profileView.php');
-            exit;
-        } else {
-            throw new Exception('Failed to update user with ID: ' . $idToUpdate);
-        }
-    }
-
+  
 } catch (Exception $error) {
     $_SESSION['error'] = $error->getMessage();
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit;
+}
+
+   // User update logic
+if (isset($_POST['update'])) {
+    $idToUpdate = filter_input(INPUT_POST, 'updateUserId', FILTER_SANITIZE_NUMBER_INT);
+    $updatedUsername = filter_input(INPUT_POST, 'username');
+    $updatedEmail = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+    if (!$idToUpdate || !$updatedUsername || !$updatedEmail) {
+        throw new Exception('Invalid input data for updating');
+    }
+
+    $controller = new UserManagementController();
+                           
+    if ($controller->updateUser($idToUpdate, $updatedUsername, $updatedEmail, 'user')) {
+        $_SESSION['success'] = "Profile Updated Successfully!";
+        header('Location: ../views/profileView.php');
+        exit;
+    } else {
+        throw new Exception('Failed to update user with ID: ' . $idToUpdate);
+    }
 }
 ?>
